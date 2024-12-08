@@ -29,7 +29,13 @@ def get_tasks():
 def update_task(id):
     task = Task.query.get_or_404(id)
     data = request.json
-    task.status = data.get('status', task.status)
+
+    if "title" in data:
+        task.title = data["title"]
+    if "description" in data:
+        task.description = data["description"]
+    if "status" in data:
+        task.status = data["status"]
     db.session.commit()
     return jsonify({
         "id": task.id,
@@ -37,6 +43,7 @@ def update_task(id):
         "description": task.description,
         "status": task.status
     })
+
 
 @task_routes.route('/tasks/<int:id>', methods=['DELETE'])
 def delete_task(id):
